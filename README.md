@@ -20,3 +20,7 @@ Clone这个仓库到本地任意模式下运行即可(DeBug|Release|Profile)
 
 ## 一键安装
 可以在win10/11上安装使用
+
+###
+图片
+![img.png](C:\Users\28219\Desktop\demo.png)
