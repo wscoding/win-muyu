@@ -1,6 +1,6 @@
 
 # Muyu for-Windows
-<<<<<<< HEAD
+
 电子木鱼Windows版    
 电子木鱼-win桌面版   
 
@@ -9,14 +9,15 @@
   - 电子木鱼Windows版    
 木鱼小部件-win桌面PC版    
    
->>>>>>> ad5a9a9b230ad773f89b0d0471c06fbf43440968
 1.5 beta 最新版功能介绍  
 -已支持敲击次数统计  
 -已支持敲击声音  
 -修复当敲击次数超过10000+次卡段问题  
 -增加彩蛋     
---- 
-未来联网支持:    
+---   
+
+plan todo
+未来联网支持    
 全网敲击次数  
 黑/白 木鱼敲击统计  
 其他统计(统计匿名化统计,会公开代码)  
@@ -60,9 +61,12 @@ git Clone 这个仓库到本地任意模式下运行即可(Run|DeBug|Profile)
   
 ###
 图片  
-///  
-![img.png](http://file.iqg.cc/18w5qdLs)  "black"  
-![img.png](http://file.iqg.cc/2SIpzP18) "white" 
+ "black"    
+![img.png](http://file.iqg.cc/18w5qdLs)  
+  
+"white"   
+![img.png](http://file.iqg.cc/2SIpzP18) 
 
 备用下载链接:  
-https://luat.lanzoum.com/iDpZS0y2x2bi  
+[https://luat.lanzoum.com/iDpZS0y2x2bi  ](https://luat.lanzoum.com/iNfX50y6mdub
+)
