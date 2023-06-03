@@ -1,14 +1,27 @@
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wooden_fish_for_windows/config.dart';
 import 'package:wooden_fish_for_windows/muyu.dart';
+import 'RePo.dart';
+import 'package:http/http.dart' as http;
 
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Config.initWindow(args);
   runApp(const MyApp());
+
+try {
+  //http.Response response = await 
+  Getadd.sendRequest();
+  //print(response.body);
+} catch (e) {
+ // print('请求失败：$e');
+}
+
+
 }
 
 class MyApp extends StatelessWidget {
@@ -23,6 +36,7 @@ class MyApp extends StatelessWidget {
         title: 'AutoWoodenFish for Windows',
         debugShowCheckedModeBanner: false,
         home: MyHomePage(),
+        
       ),
     );
   }
