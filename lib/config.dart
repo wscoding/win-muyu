@@ -1,13 +1,18 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:screen_retriever/screen_retriever.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:windows_single_instance/windows_single_instance.dart';
 
 class Config {
   static double relHeight = 300;
+  
   static Future initWindow(List<String> args, {Size? screenSize}) async {
+    
     // 获取屏幕真实大小
     Display primaryDisplay = await screenRetriever.getPrimaryDisplay();
     relHeight = primaryDisplay.size.height * 0.15;
@@ -43,6 +48,33 @@ class Config {
   }
 }
 
+class mytextClass {
+  String _autoText = '功德';
+
+  Future<void> fetchAutoText() async {
+    final prefs = await SharedPreferences.getInstance();
+    _autoText = prefs.getString('autoText') ?? '';
+  }
+
+  Future<String?> getRandomStringFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString('list');
+    if (jsonString != null) {
+      final list = json.decode(jsonString) as List<dynamic>;
+      final stringList = list.cast<String>();
+      if (stringList.isNotEmpty) {
+        final random = Random();
+        final index = random.nextInt(stringList.length);
+        return stringList[index];
+      }
+    }
+    return null;
+  }
+
+  String getTextValue(String snapshotData) {
+    return '$_autoText $snapshotData';
+  }
+}
 
 class MyTimer {
   late Timer? _timer;

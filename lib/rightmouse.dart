@@ -1,9 +1,10 @@
+//该页面废弃
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 //import 'sp.dart';
-import 'auto/autoswich.dart';
+import 'models/autoswich.dart';
 
 
 bool isLight = false;
@@ -134,7 +135,7 @@ class MyPopupMenu  {
       } else if (value == 'color') {
  isLight = !isLight;  
 
-      
+   
     // 处理文字设置
   } 
       else if (value == 'text') {

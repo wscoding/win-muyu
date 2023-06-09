@@ -6,10 +6,11 @@ import 'package:wooden_fish_for_windows/config.dart';
 import 'package:wooden_fish_for_windows/muyu.dart';
 import 'RePo.dart';
 
-
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Config.initWindow(args);
+   TapCounter.initialize(); // 初始化 SharedPreferences 实例
+
   runApp(const MyApp());
 
 try {
@@ -19,9 +20,8 @@ try {
 } catch (e) {
  // print('请求失败：$e');
 }
-
-
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
