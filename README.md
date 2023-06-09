@@ -68,5 +68,5 @@ git Clone 这个仓库到本地任意模式下运行即可(Run|DeBug|Profile)
 ![img.png](http://file.iqg.cc/2SIpzP18) 
 
 备用下载链接:  
-[https://luat.lanzoum.com/iDpZS0y2x2bi  ](https://luat.lanzoum.com/iNfX50y6mdub
-)
+https://luat.lanzoum.com/iNfX50y6mdub
+
