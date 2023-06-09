@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "µç×ÓÄ¾Óã"
-#define MyAppVersion "1.5 beta"
+#define MyAppVersion "1.5"
 #define MyAppPublisher "Wsoft, Inc."
 #define MyAppURL "http://a.iqg.cc/"
 #define MyAppExeName "wooden_fish_for_windows.exe"

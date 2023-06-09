@@ -1,16 +1,7 @@
 
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 
-
-
-const String versions = "1.4";
-const String appkey = "8f23f05b4a50b6481ff020320692f9e9";
-const String hosturl = "d.999087.com";
-const String mposturl = "zt.999087.com/app/muyu/repo.php";
-//const String mycolor = "black";
-//const String others = "1";
 
 
 //const or  static  ----help doc
@@ -29,6 +20,12 @@ const String mposturl = "zt.999087.com/app/muyu/repo.php";
 // 常量是使用 const 关键字声明的，而静态变量是使用 static 关键字声明的。
 
 //const String baseUrl = 'http://zt.999087.com/app/muyu/repo.php';
+const String versions = "1.4";
+const String appkey = "8f23f05b4a50b6481ff020320692f9e9";
+const String hosturl = "d.999087.com";
+const String mposturl = "zt.999087.com/app/muyu/repo.php";
+//const String mycolor = "black";
+//const String others = "1";
 
 
 //启动次数
@@ -44,7 +41,6 @@ class Getadd {
 // use class
 //  Getadd.sendRequest();
 
-
 //在线人数
 class GetOnline {
   static Future<http.Response> sendRequest() async {
@@ -57,7 +53,6 @@ class GetOnline {
 }
 // use class
 //  GetOnline.sendRequest();
-
 
 //主程序统计
 class Masterpost {

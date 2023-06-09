@@ -4,15 +4,20 @@ import 'package:wooden_fish_for_windows/config.dart';
 import 'package:wooden_fish_for_windows/toast.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:wooden_fish_for_windows/RePo.dart';
+import '/RePo.dart';
+import 'rightmouse.dart';
+import 'demo.dart';
+//import 'auto/autoswich.dart';
 
   final player = AudioPlayer();
-class WoodenFish extends StatefulWidget {
+  
+  class WoodenFish extends StatefulWidget {
   const WoodenFish({super.key});
   @override
   State<WoodenFish> createState() => _WoodenFishState();
 }
 //次数
+
 
 class TapCounter {
   static int _tapCount = 0;
@@ -28,11 +33,17 @@ class TapCounter {
 }
 
 
-class _WoodenFishState extends State<WoodenFish> with SingleTickerProviderStateMixin {
+
+
+class _WoodenFishState extends State<WoodenFish> 
+with SingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<double> muyuAnimation;
   Size size = Size(Config.relHeight * 0.6, Config.relHeight * 0.6);
-  bool isLight = false;
+  //bool isLight = false;
+
+
+
 
   @override
   void initState() {
@@ -70,7 +81,8 @@ class _WoodenFishState extends State<WoodenFish> with SingleTickerProviderStateM
                      TapCounter.increment();
     });
                   //player.stop();// 加载音频文件 audio/muyu.mp3
-                 if (player != null) { player.stop();}
+                 // ignore: unnecessary_null_comparison
+                 if (player !=null) { player.stop();}
                   player.play(AssetSource("audio/muyu.mp3") );
                   animationController.forward();
                   addOverLay(context);
@@ -86,23 +98,24 @@ Masterpost.sendRequest(content,renpin,colorss,).then((response) {
 });
 }catch(e){
 // print('请求失败：$e');
-}
-                  
-
+}       
                 },
                 onSecondaryTap: () {
-                  setState(() {
-                    isLight = !isLight;
-                  });
+                       
+     Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MenuPage()),
+            );
+   //MyPopupMenu.show(context);
 
+    //获取右键事件结束
                 },
                 onLongPress: () {
                   exit(0);
                 },
-                onPanStart: (e) {
-                   
+                onPanStart: (e) {       
                    try{
-GetOnline.sendRequest();
+                 GetOnline.sendRequest();
                    }catch(e){ // print('请求失败：$e');
                    }
                   windowManager.startDragging();
@@ -122,21 +135,12 @@ GetOnline.sendRequest();
                 )),
           ),
         ],
-      
-       
-       
-
-
-
       ),
     );
     
   }
-
-
   void addOverLay(BuildContext ctx) async {
     Toast.toast(context, isLight ? Colors.white : Colors.black);
-    
   }
 }
 

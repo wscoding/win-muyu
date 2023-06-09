@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
@@ -38,5 +40,26 @@ class Config {
       if (await windowManager.isMinimized()) await windowManager.restore();
       windowManager.focus();
     });
+  }
+}
+
+
+class MyTimer {
+  late Timer? _timer;
+  final Function() _onTick;
+
+  MyTimer(this._onTick);
+
+  void start() {
+    // Create a timer to execute the specified function every 1 second
+    _timer = Timer.periodic(Duration(seconds: 1), (_) => _onTick());
+  }
+
+  void stop() {
+    // Stop the timer if it is running
+    if (_timer != null) {
+      _timer?.cancel();
+      _timer = null;
+    }
   }
 }

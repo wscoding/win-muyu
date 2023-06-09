@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wooden_fish_for_windows/config.dart';
 import 'package:wooden_fish_for_windows/muyu.dart';
 import 'RePo.dart';
-import 'package:http/http.dart' as http;
 
 
 void main(List<String> args) async {
