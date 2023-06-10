@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:convert';
 
 
@@ -10,7 +11,7 @@ import 'package:wooden_fish_for_windows/toast.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '/RePo.dart';
-
+import 'models/autos.dart';
 
 import 'view.dart';
 //import 'auto/autoswich.dart';
@@ -23,6 +24,8 @@ import 'view.dart';
 late SharedPreferences _prefs;
   String? selectedImageName;
 
+ double _speedMultiplier = 1.0;
+ String  _selectedOption = "demusic";
   class WoodenFish extends StatefulWidget {
   const WoodenFish({super.key});
   @override
@@ -50,7 +53,9 @@ class TapCounter {
  // String uiyi = "--";
   static int _tapCount = 0;
   static late SharedPreferences _prefs;
+  Timer? autotimer;
 
+  
   static Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
     
@@ -63,14 +68,19 @@ class TapCounter {
   }
 
   static int getTapCount() {
+    _prefs.setInt('tapCount', _tapCount);
+    //未知
     return _tapCount;
   }
 }
 
 
-
 class _WoodenFishState extends State<WoodenFish> 
 with SingleTickerProviderStateMixin {
+
+    TimerExecutor _executor = TimerExecutor();
+
+//加载动画
   late AnimationController animationController;
   late Animation<double> muyuAnimation;
   Size size = Size(Config.relHeight * 0.6, Config.relHeight * 0.6);
@@ -82,6 +92,7 @@ _loadSelectedImageName();
      getSelectedImageName().then((value) {
       setState(() {
         selectedImageName = value;
+        
       });
     });
     
@@ -96,22 +107,113 @@ _loadSelectedImageName();
         animationController.reverse();
       }
     });
-
     muyuAnimation = Tween(begin: 1.0, end: 0.9).animate(animationController);
- 
    TapCounter.initialize(); // 初始化 SharedPreferences 实例
-
   }
+
+
+
+
+void qiaoji(BuildContext context, AudioPlayer player, AnimationController animationController, bool isLight) {
+  setState(() {
+   
+
+    TapCounter.increment();
+   print(_selectedOption);
+    player.setPlaybackRate(_speedMultiplier); 
+    if (player !=null) { player.stop(); }
+    player.play(AssetSource("audio/muyu.mp3"));
+    animationController.forward();
+    addOverLay(context);
+    try {
+      var content = '${TapCounter.getTapCount()}';
+      var renpin = TapCounter.getTapCount() < 100 ? '${TapCounter.getTapCount()}' : '${TapCounter.getTapCount()~/100}';
+      var colorss = isLight ? Colors.white.toString() : Colors.black.toString();
+      Masterpost.sendRequest(content,renpin,colorss).then((response) {
+        GetOnline.sendRequest();
+      });
+    } catch(e) {
+      // 处理异常
+    }
+  });
+}
+
+  @override
+  void dispose() {
+    _executor.stop();
+    super.dispose();
+  }
+
+void _onTap() {
+  setState(() {
+    qiaoji(context, player, animationController, isLight);
+  });
+
+  // 设置播放速度
+  //double desiredSpeed = 0.5; // 设置为半速
+  // double desiredSpeed = 4.0; // 设置为4倍速
+
+  // 更新播放速度
+  //player.setPlaybackRate(playbackRate: desiredSpeed);
+
+
+  if (!_executor.isRunning()) {
+    _executor.start(() {
+      setState(() {
+        qiaoji(context, player, animationController, isLight);
+      });
+    });
+  }
+}
+
+
+
+// void _onTap() {
+//   setState(() {
+//     qiaoji(context, player, animationController, isLight);
+//   });
+
+//   // 设置动画速度
+//   double desiredSpeed = 8; // 设置为半速
+//   // double desiredSpeed = 4.0; // 设置为4倍速
+
+//   if (animationController.duration != null) {
+//     // 计算新的持续时间
+//     Duration newDuration = Duration(milliseconds: (animationController.duration?.inMilliseconds ?? 0 / desiredSpeed).round());
+
+//     // 更新动画持续时间
+//     animationController.duration = newDuration;
+//   }
+
+//   if (!_executor.isRunning()) {
+//     _executor.start(() {
+//       setState(() {
+//         qiaoji(context, player, animationController, isLight);
+//       });
+//     });
+//   }
+// }
+
+
 
   void _loadSelectedImageName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    
-    String? imageName = prefs.getString('selectedImageName');
 
+        double speedMultiplier = prefs.getDouble('speedMultiplier') ?? 1.0;
+   String selectedOption = prefs.getString('selectedOption') ?? "demusic";
+        bool isHelpme = prefs.getBool('isHelpme') ?? false;
+bool isLight = prefs.getBool('isLight') ?? false;
+    String? imageName = prefs.getString('selectedImageName');
+ setState(() {
+    _selectedOption = selectedOption;
+         _speedMultiplier = speedMultiplier;
+     
+    });
 
     if (imageName != null) {
       setState(() {
         selectedImageName = imageName;
+        isLight = isLight;
       });
     }
   }
@@ -124,7 +226,7 @@ _loadSelectedImageName();
       if (value != null) {
       
         setState(() {
-      //      isLight = !isLight;  
+            isLight = !isLight;  
     //  print(isLight);
         });
       }
@@ -134,10 +236,6 @@ _loadSelectedImageName();
   
   @override
   Widget build(BuildContext context) {
-
-
-
-
  return SizedBox(
       width: double.infinity,
       height: double.infinity,
@@ -151,41 +249,22 @@ _loadSelectedImageName();
             alignment: const Alignment(0, 0.5),
                         child: GestureDetector(    
                 onTap: () {
-      
-                  setState(() {
-           //       _navigateToSelectImageScreen();
-                     TapCounter.increment();
-    });
-                  //player.stop();// 加载音频文件 audio/muyu.mp3
-                 // ignore: unnecessary_null_comparison
-                 if (player !=null) { player.stop();}
-                  player.play(AssetSource("audio/muyu.mp3") );
-                  animationController.forward();
-                  addOverLay(context);
+            // _onTap();
+            final prefs = SharedPreferences.getInstance();
+            prefs.then((prefs) {
+              bool isHelpme = prefs.getBool('isHelpme') ?? true;
+              if (isHelpme) {
+                _onTap();
+              } else {
+                setState(() {
+                //  _count++;
+                _executor.stop();
+                 qiaoji(context, player, animationController, isLight);
 
-try{
-//统计敲击次数  自动sleep
-var content = '${TapCounter.getTapCount()}';
-var renpin = TapCounter.getTapCount() < 100 ? '${TapCounter.getTapCount()}' : '${TapCounter.getTapCount()~/100}';
-var colorss  = isLight ? Colors.white.toString() : Colors.black.toString();
-Masterpost.sendRequest(content,renpin,colorss,).then((response) {
- //print(response);
- GetOnline.sendRequest();
-  print(SelectedImageName.value);
-   print('test11111111111111111111111111111');
-  print('$selectedImageName');
- print('Tap Count: ${TapCounter.getTapCount()}');
- printListFromPrefs();
-
-
-});
-
-
-
-
-}catch(e){
-
-}       
+                
+                });
+              }
+            });
                 },
                 onSecondaryTap: () {
                        
@@ -200,14 +279,13 @@ Masterpost.sendRequest(content,renpin,colorss,).then((response) {
 
 //                        isLight = !isLight;  
 //  
-     
                 onLongPress: ()  async{
  SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool _isColorBh = prefs.getBool('_isColorBh') ?? true;
-    await prefs.setBool('_isColorBh', !_isColorBh);
+   // bool isLight = prefs.getBool('isLight') ?? true;
+    await prefs.setBool('isLight', !isLight);
     setState(() {
-      _isColorBh = !isLight;
       isLight = !isLight;
+     
     });
 
   
@@ -219,7 +297,7 @@ Masterpost.sendRequest(content,renpin,colorss,).then((response) {
                    }
                   windowManager.startDragging();
                 },
-                
+                //窗口拖动
       child: AnimatedBuilder(
                   animation: muyuAnimation,
                   builder: (context, _) => Container(

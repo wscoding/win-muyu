@@ -49,11 +49,19 @@ class Config {
 }
 
 class mytextClass {
-  String _autoText = '功德';
+  String autoText = ''; // 将_autoText变量定义为公共变量
+
+  static final mytextClass _singleton = mytextClass._internal();
+
+  factory mytextClass() {
+    return _singleton;
+  }
+
+  mytextClass._internal();
 
   Future<void> fetchAutoText() async {
     final prefs = await SharedPreferences.getInstance();
-    _autoText = prefs.getString('autoText') ?? '';
+    autoText = prefs.getString('autoText') ?? ''; // 访问公共的autoText变量
   }
 
   Future<String?> getRandomStringFromPrefs() async {
@@ -72,9 +80,11 @@ class mytextClass {
   }
 
   String getTextValue(String snapshotData) {
-    return '$_autoText $snapshotData';
+    return '$autoText $snapshotData'; // 访问公共的autoText变量
   }
 }
+
+
 
 class MyTimer {
   late Timer? _timer;

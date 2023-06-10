@@ -13,7 +13,7 @@ class MyImageSelectionPage extends StatefulWidget {
 
 class _MyImageSelectionPageState extends State<MyImageSelectionPage> {
   final List<String> imageNames = [
-    'bad',
+      'muyu',
     'bagua',
     'bug',
     'car',
@@ -55,7 +55,8 @@ class _MyImageSelectionPageState extends State<MyImageSelectionPage> {
     'wh',
     'xiao',
     'xiaochou',
-    'muyu',
+  
+    'zbad',
   ];
 
   String? _selectedImageName;
@@ -67,7 +68,7 @@ class _MyImageSelectionPageState extends State<MyImageSelectionPage> {
   }
 
 
-  void _navigateToSelectImageScreen() async {
+  void navigateToSelectImageScreen() async {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => WoodenFish()),
@@ -98,13 +99,23 @@ class _MyImageSelectionPageState extends State<MyImageSelectionPage> {
               setState(() {
                 _selectedImageName = imageName;
               });
-              Navigator.pop(context, imageName);
-              _navigateToSelectImageScreen();
+             // Navigator.pop(context, imageName);
+             
             },
           );
         },
       ),
+
+      floatingActionButton: FloatingActionButton(
+onPressed: () {
+Navigator.pop(context, _selectedImageName);
+ navigateToSelectImageScreen();
+},
+child: Icon(Icons.check),
+),
     );
+
+    
   }
 }
 

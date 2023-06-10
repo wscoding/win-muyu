@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:wooden_fish_for_windows/config.dart';
 import 'package:wooden_fish_for_windows/muyu.dart';
 import 'models/textplus.dart';
@@ -47,10 +47,11 @@ class Toast  {
             
             if (snapshot.hasData && snapshot.data != null) {
       final textValue = mtextclass.getTextValue(snapshot.data!);
-
+ mtextclass.fetchAutoText(); // 获取自动文本
+final autoText = mtextclass.autoText; // 获取公共的autoText变量
               return Text(
                 TapCounter.getTapCount() < 100
-                    ? '$textValue+${TapCounter.getTapCount()}'
+                    ? '$autoText+${TapCounter.getTapCount()}'
                     : '${snapshot.data!}+${TapCounter.getTapCount()~/100}',
                 style: TextStyle(color: textColor, fontSize: 32.sp),
               );
@@ -65,8 +66,6 @@ class Toast  {
           },
         ),
       
-
-
 //                   Text(
 // TapCounter.getTapCount() < 100 ? '文字+${TapCounter.getTapCount()}' : '平安+${TapCounter.getTapCount()~/100}',
 //                     style: TextStyle(color: textColor, fontSize: 32.sp,),

@@ -3,12 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'models/automusic.dart';
+import 'models/beisu.dart';
+import 'page/filelocal.dart';
 import 'package:wooden_fish_for_windows/page/viewdraw.dart';
 import 'page/tongji.dart';
 import 'page/moretext.dart';
-//import 'undeniable/views.dart';
+import 'page/chmusic.dart';
+import 'muyu.dart';
 
 
 class MenuPage extends StatefulWidget {
@@ -21,22 +22,23 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
    //final TextEditingController _controller = TextEditingController();
 
-  bool _isSoundOno = true, _isHelpme = false, _isColorBh = true;
-
+  bool _isSoundOno = true, isHelpme = false, isLight = true;
+  //不建议使用_
   String _autoText = '', _isavedNumber = '', _aboutText = '',_iotText = '',_moretext = '';
- 
+   double speedMultiplier = 1.0;
+
   //double _iotText = ;
     double _timeText = 1.0;
     double popupMenuItemHeight = 30.0;   //父级菜单 高度
     double appBarHeight = 1.0;   //子级菜单高度
     double buttonHeight = 48.0;
-bool isLight = false;
+//bool isLight = false;
   int _tapCount = 0;
        
   @override
   void initState() {
     super.initState();
-    _loadSettings();
+    loadSettings();
   }
 
 Future<void> clearSharedPreferences() async {
@@ -45,16 +47,18 @@ Future<void> clearSharedPreferences() async {
 }
 
 
-//Todo 
-  void _loadSettings() async {
+//Todo  读取sp
+  void loadSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
+      
+        speedMultiplier = prefs.getDouble('speedMultiplier') ?? 1.0;
         _moretext = prefs.getString('moretext') ?? "平安";
       _isSoundOno = prefs.getBool('_isSoundOno') ?? true;
      //  _autoText = prefs.getString('autoText') ?? '';//次数
          _timeText = prefs.getDouble('timeText') ?? 10;
-     _isHelpme = prefs.getBool('_isHelpme') ?? true;
-     _isColorBh = prefs.getBool('_isColorBh') ?? true;
+     isHelpme = prefs.getBool('isHelpme') ?? true;
+     isLight = prefs.getBool('isLight') ?? true;
     _aboutText = prefs.getString('aboutText') ?? '';
       _autoText = prefs.getString('autoText') ?? '';
        _isavedNumber = prefs.getString('isavedNumber') ?? '';
@@ -65,24 +69,30 @@ Future<void> clearSharedPreferences() async {
     });
   }
 
-   
+   //更新  及写入  sp
   void _saveSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    await prefs.setBool('_isColorBh', _isColorBh);
-       await prefs.setString('moretext', _moretext);//平安
+     await prefs.setDouble('speedMultiplier', speedMultiplier);
 
+    await prefs.setBool('isLight', isLight);
+       await prefs.setString('moretext', _moretext);//平安
     //_aboutText 是用户填写的值  aboutText是sp数据库的表
-   await prefs.setBool('_isHelpme', _isHelpme);
+   await prefs.setBool('isHelpme', isHelpme);
    await prefs.setString('autoText', _autoText);
     await prefs.setBool('_isSoundOno', _isSoundOno);
   await prefs.setString('savenumber', _autoText);
   await prefs.setString('aboutText', _aboutText);//100
       ///将用户填写的值_aboutText 写入sp的aboutText表
       //左表(固定)看不见   右值(可读写)能看见
-          await prefs.setInt('tapCount', _tapCount);
+       //   await prefs.setInt('tapCount', _tapCount);
 
     await prefs.setString('isavedNumber', _isavedNumber);
+
+     setState(() {
+      speedMultiplier = speedMultiplier;
+    });
+  
   }
 
   //如何使用 
@@ -93,6 +103,20 @@ String aboutText = prefs.getString('aboutText') ?? 'About this app';
 
 bool isSoundOn = prefs.getBool('isSoundOn') ?? true; // default value is true
   */
+
+  void navigateToSelectImageScreen() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WoodenFish()),
+    ).then((value) {
+      if (value != null) {
+        setState(() {
+          speedMultiplier = value;
+        });
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -109,13 +133,14 @@ bool isSoundOn = prefs.getBool('isSoundOn') ?? true; // default value is true
             
       height: popupMenuItemHeight, // 设置按钮高度为 50 像素
       child: ListTile(
-        title:  Text('< 返回'),
-        trailing: IconButton(
-            icon: Icon(Icons.exit_to_app),
+           trailing: IconButton(
+            icon: Icon(Icons.clear),
             onPressed: (){
 exit(0);
             }
           ),
+        title:  Text('< 返回'),
+     
         onTap: () {
          //  clearSharedPreferences();
    Navigator.of(context).pop();   // 按钮点击事件处理
@@ -166,23 +191,13 @@ ExpansionTile(
   },
 ),
 ListTile(
-  title:const Text('分享'),
+  title:const Text('停留'),
    trailing:const Text('开发中...'),
   onTap: () {
 
   },
 ),
-              // ListTile(
-              //   title:const Text('更多'),
-              //   onTap: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => MorePage(),
-              //       ),
-              //     );
-              //   },
-              // ),
+      
               
             ],
           ),
@@ -211,74 +226,78 @@ onTap: () async {
      SizedBox(
       height: 40, // 设置 ListTile 的高度为 80 像素
       child: ListTile(
-       subtitle :Text(_isColorBh ? '已完成' : '点我'),
-        title: Text('初始化'),
+       subtitle :Text(isLight ? '黑色' : '白色'),
+        title: Text('重载'),
           trailing: Switch(
-              value: _isColorBh,
+              value: isLight,
               onChanged: (value) {
                 setState(() {
-                  _isColorBh = value;
-                   isLight = !isLight;      
+                  isLight =! value;
+                 //  isLight = !isLight;      
                 });
                 _saveSettings();
+             navigateToSelectImageScreen();
               },
             ),  
-           // subtitle: Text(_isColorBh ? '黑色' : '白色'),
+           // subtitle: Text(isLight ? '黑色' : '白色'),
       ),
     ),
 
                  ExpansionTile(
             title:const  Text('敲击声'),
-            children: [
-              
+            children: [          
      SizedBox(
   height:40, // 设置 ListTile 的高度为 30 像素
   child: ListTile(
     title:  Text(_isSoundOno ? '开' : '关'), // 左侧文本
     trailing: Switch(
       value: _isSoundOno,
-      onChanged: (value) {
-        setState(() {
-          _isSoundOno = value;
-        });
-        _saveSettings();
-      },
+        onChanged: null,
+      // onChanged: (value) {
+      //   setState(() {
+      //     _isSoundOno = value;
+      //   });
+      //   _saveSettings();
+      // },
     ), // 中间开关按钮
   //     subtitle: Text(_isSoundOno ? '开' : '关'),
   ),
 ),
 
+const SizedBox(
+height: 10,
+),
+    
               ListTile(
-                title:const  Text('切换声音'),
-                trailing:const  Text('路径'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AboutPage(
-                        initialValue: _aboutText,
-                        onSave: (text) {
-                          setState(() {
-                            _aboutText = text;
-                          });
-                          _saveSettings();
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                title:const Text('内置'),
+                title:const Text('切换声音'),
                 onTap: () {
                     // 在 onTap 中打开 automusic.dart 页面
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => automusicPage()),
+                  MaterialPageRoute(builder: (context) => musicSubPage()),
                 );
                 },
               ),
               
+                 ListTile(
+      title:const Text('播放速度'),
+        trailing: Text('$speedMultiplier x'),
+                onTap: () {
+
+   setState(() {
+final speedMultiplier =  Navigator.push<double>(
+  context,
+  MaterialPageRoute(builder: (context) => SpeedSettingPage()),
+);
+if (speedMultiplier != null) {
+  // 处理选中的速度值
+  
+}
+        });
+
+         
+                },
+              ),
             ],
           ),  
           //Todo
@@ -289,28 +308,23 @@ onTap: () async {
      SizedBox(
   height:30, // 设置 ListTile 的高度为 30 像素
   child: ListTile(
-    title:Text(_isHelpme ? '开' : '关'), // 左侧文本
+    title:Text(isHelpme ? '开' : '关'), // 左侧文本
     trailing: Switch(
-      value: _isHelpme,
+      value: isHelpme,
       onChanged: (value) {
         setState(() {
-          _isHelpme = value;
+          isHelpme = value;
         });
         _saveSettings();
+         // navigateToSelectImageScreen();
       },
     ), // 中间开关按钮
-      // subtitle: Text(_isHelpme ? '开' : '关'),
+      // subtitle: Text(isHelpme ? '开' : '关'),
   ),
 ),
 
 
-   ListTile(
-      title:const Text('速度'),
-        trailing:const Text('开发中...'),
-                onTap: () {
-         
-                },
-              ),
+
 
               ListTile(
   title:const Text('定时任务'),
@@ -320,23 +334,10 @@ onTap: () async {
   },
 ),
 ListTile(
-  title:const Text('联网任务'),
+  title:const Text('跟随心跳'),
   trailing:const Text('开发中...'),
   onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => helpmePage(
-          initialValue: _iotText,
-          onSave: (text) {
-            setState(() {
-              _iotText = text;
-            });
-            _saveSettings();
-          },
-        ),
-      ),
-    );
+
   },
 ),
 
@@ -356,25 +357,13 @@ ListTile(
             ],
           ),
 
+    
        SizedBox(
       height: popupMenuItemHeight, // 设置按钮高度为 50 像素
       child: ListTile(
-        title:const  Text('排行榜'),
-          trailing:const Text('开发中...'),
-        onTap: () {
-
-
-         //  clearSharedPreferences();
-       //  Navigator.of(context).pop();   // 按钮点击事件处理
-        },
-      ),
-    ),
-       SizedBox(
-      height: popupMenuItemHeight, // 设置按钮高度为 50 像素
-      child: ListTile(
-        title:const  Text('统计'),
-        trailing:const  Text('*beta'),
-      //  subtitle  :Text(_tapCount.toString()),
+        title:const  Text('*统计 beta'),
+       // trailing:const  Text('*beta'),
+      trailing  :Text(_tapCount.toString()+' 次'),
         onTap: () {
          Navigator.push(
   context,
@@ -431,13 +420,19 @@ ListTile(
                   );
                 },
               ),
-                     ListTile(
-                title:const Text('统计'),
-                  trailing:const Text('开发中...'),
-                onTap: () {
-               
-                },
-              ),
+               SizedBox(
+      height: popupMenuItemHeight, // 设置按钮高度为 50 像素
+      child: ListTile(
+        title:const  Text('排行榜'),
+          trailing:const Text('开发中...'),
+        onTap: () {
+
+
+         //  clearSharedPreferences();
+       //  Navigator.of(context).pop();   // 按钮点击事件处理
+        },
+      ),
+    ),
             ],
           ),
         ],
@@ -449,174 +444,7 @@ ListTile(
 
 
 
-class AboutPage extends StatefulWidget {
-  final String initialValue;
-  final Function(String) onSave;
 
-  AboutPage({required this.initialValue, required this.onSave});
-
-  @override
-  _AboutPageState createState() => _AboutPageState();
-}
-
-class _AboutPageState extends State<AboutPage> {
-  late TextEditingController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController(text: widget.initialValue);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-
-
-    
-    return Scaffold(
-    
-      body: Column(
-        children: [
-          TextField(
-  controller: _controller,
-  onChanged: (value) {
-    widget.onSave(value);
-  },
-  decoration: InputDecoration(
-    hintText: '输入路径 or URL',
-    border:const OutlineInputBorder(),
-    filled: true,//填充
-    fillColor: Colors.grey[200],
-    contentPadding:const EdgeInsets.all(8.0),
-  ),
-),
-const   SizedBox(height: 10),
-          ElevatedButton(
-            child:
-          const   Text('保存'),
-            onPressed: () {
-              widget.onSave(_controller.text);
-              Navigator.pop(context);
-            },
-          ),
-
-           Expanded(
-      child: ListView(
-        children: [
-          Container(
-            height: 20, // 设置第一个视图项的高度为 50 像素
-            child:const ListTile(
-              title: Text('仅MP3格式文件'),
-            ),
-          ),
-          Container(
-            height: 20, // 设置第一个视图项的高度为 50 像素
-            child:const ListTile(
-              title: Text('若失效请使用默认设置'),
-            ),
-          ),
-          Container(
-            height: 20, // 设置第一个视图项的高度为 50 像素
-            child:const ListTile(
-              title: Text('时长建议 0.5-3 秒'),
-            ),
-          ),
-          // 添加更多的视图项
-        ],
-      ),
-    ),
-        ],
-      ),
-      
-    );
-  }
-}
-
-//自动敲
-class helpmePage extends StatefulWidget {
-  final String initialValue;
-  final Function(String) onSave;
-
-  helpmePage({required this.initialValue, required this.onSave});
-
-  @override
-  _helpmePage createState() => _helpmePage();
-}
-
-
-class _helpmePage extends State<helpmePage> {
-  late TextEditingController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController(text: widget.initialValue);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-    
-      body: Column(
-        children: [
-          TextField(
-  controller: _controller,
-   keyboardType: TextInputType.number,
-  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
-  onChanged: (value) {
-    widget.onSave(value);
-  },
-  decoration: InputDecoration(
-    hintText: '输入路径 or URL',
-    border:const OutlineInputBorder(),
-    
-    filled: true,
-    fillColor: Colors.grey[200],
-    contentPadding:const EdgeInsets.all(8.0),
-  ),
-),
-   SizedBox(height: 10),
-          ElevatedButton(
-            child:
-             Text('保存'),
-            onPressed: () {
-              widget.onSave(_controller.text);
-              Navigator.pop(context);
-            },
-          ),
-
-           Expanded(
-      child: ListView(
-        children: [
-          Container(
-            height: 20, // 设置第一个视图项的高度为 50 像素
-            child:const ListTile(
-              title: Text('仅支持音频格式的文件'),
-            ),
-          ),
-          Container(
-            height: 20, // 设置第一个视图项的高度为 50 像素
-            child:const ListTile(
-              title: Text('若失效请使用默认设置'),
-            ),
-          ),
-          Container(
-            height: 20, // 设置第一个视图项的高度为 50 像素
-            child:const ListTile(
-              title: Text('时长0.5-3.0 S'),
-            ),
-          ),
-          // 添加更多的视图项
-        ],
-      ),
-    ),
-        ],
-      ),
-      
-    );
-  }
-}
 
 //文字
 class textPage extends StatefulWidget {
@@ -761,4 +589,6 @@ return Scaffold(
 );
   }
 }
+
+
 

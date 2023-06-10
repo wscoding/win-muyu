@@ -45,6 +45,7 @@ class TapCounterHelper {
     } else {
       int newPeaceCount = peaceCount + (tapCount ~/ 100);
       return '${tapCount ~/ 100} ${newPeaceCount}';
+      //
     }
   }
 }
