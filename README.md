@@ -1,40 +1,41 @@
 
-# Muyu for-Windows
+# Prue Widgets-for-Windows
 
-电子木鱼Windows版    
-电子木鱼-win桌面版   
+Windows桌面小部件
+win电脑小部件
 
 
 =======
   - 电子木鱼Windows版    
-木鱼小部件-win桌面PC版    
+改名-Prue Widgets
    
-1.5 beta 最新版功能介绍  
+v2.0 最新版功能介绍  
 -已支持敲击次数统计  
 -已支持敲击声音  
+-已支持自动敲击
 -修复当敲击次数超过10000+次卡段问题  
 -增加彩蛋     
 ---   
 
-plan todo
-未来联网支持    
-全网敲击次数  
+plan todo 
+--未来联网支持    
+--全网敲击次数  
 黑/白 木鱼敲击统计  
 其他统计(统计匿名化统计,会公开代码)  
 等待增加敲击木棒效果 
 
 ## 快速开始
 git Clone 这个仓库到本地任意模式下运行即可(Run|DeBug|Profile)
-
+flutter build Windows 
 ---
 🙏🏿敲电子木鱼,颂赛博真经,见机甲佛祖.  
 咱主打一个虔诚啊(娱乐)  
 --
 
 ### 操作 (DDoS 佛祖)
-- 右键切换黑/白颜色  
+- 右键打开菜单
 - 左键开敲（功德+1）  
-- 左键长按退出
+- 左键长按切换颜色
 
 首次安装时记得勾选创建桌面快捷方式,不然找不到
 --- 
@@ -45,7 +46,7 @@ git Clone 这个仓库到本地任意模式下运行即可(Run|DeBug|Profile)
 可以在win10/11上安装使用,   
 双击应用图标即可安装  
 
-1.4 beta 关于兼容性:  
+ 关于兼容性:  
 被阉割的系统和早期win10系统可能无法安装  
 # 解决方法:  
 1.搜索引擎 "vcruntime140_1.dll无法继续执行代码怎么办？"    
@@ -63,10 +64,29 @@ git Clone 这个仓库到本地任意模式下运行即可(Run|DeBug|Profile)
 图片  
  "black"    
 ![img.png](http://file.iqg.cc/18w5qdLs)  
-  
+    
 "white"   
 ![img.png](http://file.iqg.cc/2SIpzP18) 
+  
+"自定义声音"   
+![img.png](http://file.iqg.cc/3JqNp2f9) 
+
+"自定义图片"   
+![img.png](http://file.iqg.cc/3OTAnvOf) 
+
+"自定义文字"   
+![img.png](http://file.iqg.cc/0fOTNKrU) 
+
+"支持自动播放"   
+![img.png](http://file.iqg.cc/0YLdFqNf) 
+
+"次数统计管理"   
+![img.png](http://file.iqg.cc/14toy97T) 
+
+
 
 备用下载链接:  
-https://luat.lanzoum.com/iNfX50y6mdub
+https://luat.lanzoum.com/ic74K0yxdalc
 
+"打赏开发者"   
+![img.png](http://file.iqg.cc/2dn42zkb) 
