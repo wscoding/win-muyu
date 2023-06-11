@@ -311,7 +311,13 @@ void _onTap() {
             });
                 },
                 onSecondaryTap: () {
-                       
+                         try{
+                    
+                 GetOnline.sendRequest();
+                 print("成功");
+                   }catch(e){ 
+                  print('请求失败：$e');
+                   }
      Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => MenuPage()),
@@ -326,6 +332,7 @@ void _onTap() {
                 onLongPress: ()  async{
  SharedPreferences prefs = await SharedPreferences.getInstance();
    // bool isLight = prefs.getBool('isLight') ?? true;
+   
     await prefs.setBool('isLight', !isLight);
     setState(() {
       isLight = !isLight;
@@ -335,10 +342,7 @@ void _onTap() {
   
                 },
                 onPanStart: (e) {       
-                   try{
-                 GetOnline.sendRequest();
-                   }catch(e){ // print('请求失败：$e');
-                   }
+                 
                   windowManager.startDragging();
                 },
                 //窗口拖动

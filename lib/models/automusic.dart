@@ -451,6 +451,36 @@ final _audioPlayer = AudioPlayer();
           ),
 
 
+     RadioListTile<String>(
+            title: const Text('啊哈'),
+            value: 'audio/ah.mp3',
+            groupValue: _selectedMusic,
+            onChanged: (String? value) {
+              setState(() {
+                _selectedMusic = value!;
+                _saveSelectedMusic(value);
+              });
+                 _audioPlayer.play(AssetSource("$value")).then((value) {
+    // 播放完成后执行其他操作
+    //print('音乐播放完毕');
+  });
+            },
+          ),
+     RadioListTile<String>(
+            title: const Text('驴叫'),
+            value: 'audio/lu.mp3',
+            groupValue: _selectedMusic,
+            onChanged: (String? value) {
+              setState(() {
+                _selectedMusic = value!;
+                _saveSelectedMusic(value);
+              });
+                 _audioPlayer.play(AssetSource("$value")).then((value) {
+    // 播放完成后执行其他操作
+    //print('音乐播放完毕');
+  });
+            },
+          ),
 
 
 

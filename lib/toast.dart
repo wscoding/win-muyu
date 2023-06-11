@@ -50,8 +50,8 @@ class Toast  {
       final textValue = mtextclass.getTextValue(snapshot.data!);
  mtextclass.fetchAutoText();
 final autoText = mtextclass.autoText; 
-  print('单独:'+ autoText); 
-  print('json'+ textValue); 
+  //print('单独:'+ autoText); 
+//  print('json'+ textValue); 
   // 获取公共的autoText变量
    // print('打印'+ ); 
               return Text(
