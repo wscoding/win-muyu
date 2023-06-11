@@ -89,4 +89,4 @@ flutter build Windows
 https://luat.lanzoum.com/ic74K0yxdalc
 
 "打赏开发者"   
-![img.png](http://file.iqg.cc/2dn42zkb) 
+![img.png](http://file.iqg.cc/2q5aPMko) 
