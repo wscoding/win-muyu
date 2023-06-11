@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wooden_fish_for_windows/muyu.dart';
+import 'package:prue_widgets/muyu.dart';
 
 class SpeedSettingPage extends StatefulWidget {
   @override

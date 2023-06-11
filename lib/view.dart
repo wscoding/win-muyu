@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models/beisu.dart';
-import 'page/filelocal.dart';
-import 'package:wooden_fish_for_windows/page/viewdraw.dart';
-import 'page/tongji.dart';
-import 'page/moretext.dart';
-import 'page/chmusic.dart';
+import 'undeniable/filelocal.dart';
+import 'pageview/viewdraw.dart';
+import 'pageview/tongji.dart';
+import 'pageview/moretext.dart';
+import 'pageview/chmusic.dart';
 import 'muyu.dart';
-
+import 'pageview/morepage.dart';
 
 class MenuPage extends StatefulWidget {
 
@@ -22,14 +22,14 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
    //final TextEditingController _controller = TextEditingController();
 
-  bool _isSoundOno = true, isHelpme = false, isLight = true;
+  bool _isSoundOno = true, isHelpme = false, isLight = false;
   //不建议使用_
-  String _autoText = '', _isavedNumber = '', _aboutText = '',_iotText = '',_moretext = '';
+  String _autoText = 'Bug', _isavedNumber = '', _aboutText = '',_iotText = '',_moretext = '';
    double speedMultiplier = 1.0;
-
+ String  _selectedOption = "demusic";
   //double _iotText = ;
     double _timeText = 1.0;
-    double popupMenuItemHeight = 30.0;   //父级菜单 高度
+    double popupMenuItemHeight = 40.0;   //父级菜单 高度
     double appBarHeight = 1.0;   //子级菜单高度
     double buttonHeight = 48.0;
 //bool isLight = false;
@@ -50,20 +50,22 @@ Future<void> clearSharedPreferences() async {
 //Todo  读取sp
   void loadSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String selectedOption = prefs.getString('selectedOption') ?? "demusic";
     setState(() {
-      
+         
+
         speedMultiplier = prefs.getDouble('speedMultiplier') ?? 1.0;
         _moretext = prefs.getString('moretext') ?? "平安";
       _isSoundOno = prefs.getBool('_isSoundOno') ?? true;
      //  _autoText = prefs.getString('autoText') ?? '';//次数
          _timeText = prefs.getDouble('timeText') ?? 10;
      isHelpme = prefs.getBool('isHelpme') ?? true;
-     isLight = prefs.getBool('isLight') ?? true;
+     isLight = prefs.getBool('isLight') ?? false;
     _aboutText = prefs.getString('aboutText') ?? '';
-      _autoText = prefs.getString('autoText') ?? '';
+      _autoText = prefs.getString('autoText') ?? 'Bug';
        _isavedNumber = prefs.getString('isavedNumber') ?? '';
              _tapCount = prefs.getInt('tapCount') ?? 0;
-
+    _selectedOption = selectedOption;
  //左边是vlue  右边带边从sp里面获取数据
    // _controller.text = _savedNumber;
     });
@@ -91,6 +93,9 @@ Future<void> clearSharedPreferences() async {
 
      setState(() {
       speedMultiplier = speedMultiplier;
+
+
+
     });
   
   }
@@ -226,13 +231,13 @@ onTap: () async {
      SizedBox(
       height: 40, // 设置 ListTile 的高度为 80 像素
       child: ListTile(
-       subtitle :Text(isLight ? '黑色' : '白色'),
-        title: Text('重载'),
+       subtitle :Text(isLight ? '挂载' : '保存'),
+        title: Text('数据'),
           trailing: Switch(
               value: isLight,
               onChanged: (value) {
                 setState(() {
-                  isLight =! value;
+             isLight =! value;
                  //  isLight = !isLight;      
                 });
                 _saveSettings();
@@ -269,7 +274,8 @@ height: 10,
 ),
     
               ListTile(
-                title:const Text('切换声音'),
+                title:const Text('音频'),
+                trailing:Text(_selectedOption),
                 onTap: () {
                     // 在 onTap 中打开 automusic.dart 页面
                 Navigator.push(
@@ -340,26 +346,19 @@ ListTile(
 
   },
 ),
-
-
-              ListTile(
-                title:const Text('更多'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MorePage(),
-                    ),
-                  );
-                },
-              ),
+  
+        
               
+
+
+       
             ],
+
           ),
 
-    
-       SizedBox(
-      height: popupMenuItemHeight, // 设置按钮高度为 50 像素
+
+            SizedBox(
+     // height: 60, // 设置按钮高度为 50 像素
       child: ListTile(
         title:const  Text('*统计 beta'),
        // trailing:const  Text('*beta'),
@@ -376,30 +375,9 @@ ListTile(
       ),
     ),
 
-          ExpansionTile(
-            title:const Text('更多'),
-            children: [
-              ListTile(
-                title:const Text('关于'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AboutPage(
-                        initialValue: _aboutText,
-                        onSave: (text) {
-                          setState(() {
-                            _aboutText = text;
-                          });
-                          _saveSettings();
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                title:const Text('赞助'),
+          ListTile(
+                title:const Text('更多'),
+                trailing:Icon(Icons.commit),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -409,32 +387,9 @@ ListTile(
                   );
                 },
               ),
-                     ListTile(
-                title:const Text('更新  '),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MorePage(),
-                    ),
-                  );
-                },
-              ),
-               SizedBox(
-      height: popupMenuItemHeight, // 设置按钮高度为 50 像素
-      child: ListTile(
-        title:const  Text('排行榜'),
-          trailing:const Text('开发中...'),
-        onTap: () {
 
 
-         //  clearSharedPreferences();
-       //  Navigator.of(context).pop();   // 按钮点击事件处理
-        },
-      ),
-    ),
-            ],
-          ),
+
         ],
       ),
     );
@@ -539,56 +494,6 @@ class _textPage extends State<textPage> {
 
 
 
-class MorePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-return Scaffold(
-
-  body: Column(
-    
-    children: [
-      Container(
-         padding: EdgeInsets.fromLTRB(20.0, 0, 40.0, 1.0),
-        height: 30,
-        child: ListTile(
-          title: Text('<返回'),
-         // subtitle: Text('Subtitle 1'),
-          //trailing: Icon(Icons.arrow_forward),
-          onTap: () {
-           Navigator.of(context).pop(); 
-          },
-        ),
-      ),
-      Container(
-        height: 40,
-        child: ListTile(
-          title: Text('Card 2'),
-          subtitle: Text('Subtitle 2'),
-          trailing: Icon(Icons.arrow_forward),
-          onTap: () {
-            // TODO: 在这里添加 Card 2 的点击事件处理代码
-          },
-        ),
-      ),
-      Container(
-        height: 40,
-        child: ListTile(
-          
-          title: Text('Card 3'),
-          subtitle: Text('Subtitle 3'),
-          trailing: Icon(Icons.arrow_forward),
-          onTap: () {
-            // TODO: 在这里添加 Card 3 的点击事件处理代码
-          },
-        ),
-      ),
-
-      
-    ],
-  ),
-);
-  }
-}
 
 
 

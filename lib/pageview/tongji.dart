@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wooden_fish_for_windows/view.dart';
 
 import '../muyu.dart';
 class TapCountPage extends StatefulWidget {

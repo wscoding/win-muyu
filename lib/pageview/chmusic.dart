@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wooden_fish_for_windows/models/automusic.dart';
-import 'package:wooden_fish_for_windows/muyu.dart';
+import 'package:prue_widgets/models/automusic.dart';
+import 'package:prue_widgets/muyu.dart';
 
 import '../models/palymusic.dart';
 import '../models/urlplay.dart';
@@ -18,7 +18,7 @@ class musicSubPage extends StatefulWidget {
 class _MySubPageState extends State<musicSubPage> {
   String? _selectedOption;
   String _autofile = '';
-
+  String _selectmusic = 'muyu';
 
   @override
   void initState() {
@@ -40,16 +40,23 @@ class _MySubPageState extends State<musicSubPage> {
   }
 
 
-
   Future<void> _loadSelectedOption() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _selectedOption = prefs.getString('selectedOption');
-         
         _autofile = prefs.getString('autofile') ?? '';
-      
+         _selectmusic = prefs.getString('selectmusic') ?? '';
     });
   }
+
+  zhenze1(){
+  String tt = _selectmusic;
+RegExp exp = RegExp(r"audio\/|\.mp3");
+String resultmp3 = tt.replaceAll(exp, "");
+//print(result);  // 输出 "qingcui"
+return resultmp3;
+}
+
 
   Future<void> _saveSelectedOption(String value) async {
     final prefs = await SharedPreferences.getInstance();
@@ -89,7 +96,8 @@ navigateToSelectImageScreen();
 
           ListTile(
             title: const Text('内置'),
-            trailing: const Text('推荐'),
+ trailing: const Text('默认'),
+            subtitle:  Text(zhenze1()),
             leading: Radio(
               value: 'demusic',
               groupValue: _selectedOption,
@@ -117,7 +125,9 @@ navigateToSelectImageScreen();
             },
           ),
           ListTile(
+            trailing: const Text('推荐'),
             title: const Text('本地'),
+                   subtitle:  Text("mp3、wav等"),
             leading: Radio(
               value: 'localmusic',
               groupValue: _selectedOption,
@@ -150,6 +160,7 @@ navigateToSelectImageScreen();
           ),
           ListTile(
             title: const Text('URL'),
+                  subtitle:  Text("直链"),
              trailing: const Text('不推荐'),
             leading: Radio(
               value: 'urlmusic',

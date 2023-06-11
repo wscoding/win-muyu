@@ -5,9 +5,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wooden_fish_for_windows/config.dart';
-import 'package:wooden_fish_for_windows/page/viewdraw.dart';
-import 'package:wooden_fish_for_windows/toast.dart';
+import 'package:prue_widgets/config.dart';
+import 'package:prue_widgets/toast.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '/RePo.dart';
@@ -17,15 +16,15 @@ import 'view.dart';
 //import 'auto/autoswich.dart';
 
   final player = AudioPlayer();
-
-
-
-
 late SharedPreferences _prefs;
   String? selectedImageName;
+ String? _musicPath;
+ String? _musicurl;
+ String   _urlmusic = "http://wen.iqg.cc/ss.mp3";
 
  double _speedMultiplier = 1.0;
- String  _selectedOption = "demusic";
+ //String ?  _selectedOption ;
+ String _autofile = "";
   class WoodenFish extends StatefulWidget {
   const WoodenFish({super.key});
   @override
@@ -84,7 +83,7 @@ with SingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<double> muyuAnimation;
   Size size = Size(Config.relHeight * 0.6, Config.relHeight * 0.6);
-bool isLight = false;
+bool isLight = true;
   @override
   void initState() {
     super.initState();
@@ -112,17 +111,83 @@ _loadSelectedImageName();
   }
 
 
+  _loadSelectedImageName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-
-void qiaoji(BuildContext context, AudioPlayer player, AnimationController animationController, bool isLight) {
-  setState(() {
+        double speedMultiplier = prefs.getDouble('speedMultiplier') ?? 1.0;
+ //  String selectedOption = prefs.getString('selectedOption') ?? "demusic";
+        bool isHelpme = prefs.getBool('isHelpme') ?? false;
+bool isLight = prefs.getBool('isLight') ?? false;
+    String? imageName = prefs.getString('selectedImageName');
    
+ setState(() {
+String selectedOption = prefs.getString('selectedOption') ?? "demusic";
+         _speedMultiplier = speedMultiplier;
+      _musicPath = prefs.getString('musicPath') ?? '';
+   String _autofile = prefs.getString('autofile') ?? 'audio/muyu.mp3';
+        //musicurl   网络链接
+    String   _urlmusic = prefs.getString('urlmusic') ?? '';
+    });
+
+    if (imageName != null) {
+      setState(() {
+        selectedImageName = imageName;
+       
+      });
+    }
+  }
+
+
+
+Future<void> qiaoji(BuildContext context, AudioPlayer 
+player, AnimationController animationController, bool isLight) async {
+   SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  setState(() {
+   String selectedOption = prefs.getString('selectedOption') ?? "demusic";
+String      _musicurl = prefs.getString('musicurl') ?? 'http://wen.iqg.cc/ss.mp3';
+      _musicPath = prefs.getString('musicPath') ?? '';
+   String _autofile = prefs.getString('selectmusic') ?? 'audio/muyu.mp3';
+        //musicurl   网络链接
+    String   _urlmusic = prefs.getString('urlmusic') ?? '';
+// prefs.clear();
 
     TapCounter.increment();
-   print(_selectedOption);
-    player.setPlaybackRate(_speedMultiplier); 
+   //print(_selectedOption);
+      // print(_musicurl);
+      // print(_musicPath);
+    
     if (player !=null) { player.stop(); }
-    player.play(AssetSource("audio/muyu.mp3"));
+    player.setPlaybackRate(_speedMultiplier); 
+  //  player.play(AssetSource("audio/muyu.mp3"));
+//player.play(AssetSource(_autofile));
+
+    String ss = selectedOption;
+
+if (ss == "demusic") {
+player.play(AssetSource(_autofile));
+print(_autofile);
+  print(selectedOption);
+} else if (ss == "urlmusic") {
+
+player.play(UrlSource(_musicurl!));
+
+ print(_musicurl);
+  print(selectedOption);
+} else if (ss == "localmusic") {
+
+player.play(DeviceFileSource(_musicPath!));
+print(_musicPath);
+  print(selectedOption);
+} else if (ss == null) {
+   print("未知的值");
+  print(selectedOption);
+} else {
+  // 如果 ss 不是 a、b、c、d 中的任意一个值，则执行这里的代码
+  print("失败");
+  print(selectedOption);
+}
+
     animationController.forward();
     addOverLay(context);
     try {
@@ -166,25 +231,20 @@ void _onTap() {
   }
 }
 
-
-
 // void _onTap() {
 //   setState(() {
 //     qiaoji(context, player, animationController, isLight);
 //   });
-
 //   // 设置动画速度
 //   double desiredSpeed = 8; // 设置为半速
 //   // double desiredSpeed = 4.0; // 设置为4倍速
-
 //   if (animationController.duration != null) {
 //     // 计算新的持续时间
-//     Duration newDuration = Duration(milliseconds: (animationController.duration?.inMilliseconds ?? 0 / desiredSpeed).round());
-
+//     Duration newDuration = Duration(milliseconds: 
+//(animationController.duration?.inMilliseconds ?? 0 / desiredSpeed).round());
 //     // 更新动画持续时间
 //     animationController.duration = newDuration;
 //   }
-
 //   if (!_executor.isRunning()) {
 //     _executor.start(() {
 //       setState(() {
@@ -196,29 +256,13 @@ void _onTap() {
 
 
 
-  void _loadSelectedImageName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-        double speedMultiplier = prefs.getDouble('speedMultiplier') ?? 1.0;
-   String selectedOption = prefs.getString('selectedOption') ?? "demusic";
-        bool isHelpme = prefs.getBool('isHelpme') ?? false;
-bool isLight = prefs.getBool('isLight') ?? false;
-    String? imageName = prefs.getString('selectedImageName');
- setState(() {
-    _selectedOption = selectedOption;
-         _speedMultiplier = speedMultiplier;
-     
-    });
+///1.  setState   直接从sp库获取数据 
+//    _musicurl = prefs.getString('musicurl') ?? '';
+///2.  异步从sp里面获取数据
+// bool isLight = prefs.getBool('isLight') ?? false;
 
-    if (imageName != null) {
-      setState(() {
-        selectedImageName = imageName;
-        isLight = isLight;
-      });
-    }
-  }
-
-  void _navigateToSelectImageScreen() async {
+   _navigateToSelectImageScreen() async* {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const WoodenFish()),
@@ -309,7 +353,7 @@ bool isLight = prefs.getBool('isLight') ?? false;
 selectedImageName != null
             ? Image.asset(
                 'assets/images/$selectedImageName.png',
-                color: isLight ? Colors.white : Colors.black,
+                color: isLight ? Colors.black : Colors.white,
               )
             : const CircularProgressIndicator(),
                   ),
@@ -321,7 +365,7 @@ selectedImageName != null
     
   }
   void addOverLay(BuildContext ctx) async {
-    Toast.toast(context, isLight ? Colors.white : Colors.black);
+    Toast.toast(context, isLight ? Colors.black : Colors.white);
 
   }
 }

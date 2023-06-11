@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wooden_fish_for_windows/config.dart';
-import 'package:wooden_fish_for_windows/muyu.dart';
+import 'package:prue_widgets/config.dart';
+import 'package:prue_widgets/muyu.dart';
 import 'RePo.dart';
 
 void main(List<String> args) async {
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(300, 300),
       builder: (context, Widget? child) => const MaterialApp(
-        title: 'AutoWoodenFish for Windows',
+        title: 'Prue widgets for Windows',
         debugShowCheckedModeBanner: false,
         home: MyHomePage(),
         

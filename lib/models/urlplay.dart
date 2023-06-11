@@ -91,7 +91,7 @@ Future<bool> _checkAndPlayMusic(String url) async {
             padding: const EdgeInsets.all(10.0),
             child: TextFormField(
               decoration: const InputDecoration(
-                hintText: '请输入本地音乐路径',
+                hintText: '请输入网络音乐路径',
                 border: OutlineInputBorder(),
               ),
               onChanged: (value) {

@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:wooden_fish_for_windows/config.dart';
-import 'package:wooden_fish_for_windows/muyu.dart';
+import 'package:prue_widgets/config.dart';
+import 'package:prue_widgets/muyu.dart';
 import 'models/textplus.dart';
 
 
@@ -46,9 +46,14 @@ class Toast  {
           builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
             
             if (snapshot.hasData && snapshot.data != null) {
+             
       final textValue = mtextclass.getTextValue(snapshot.data!);
- mtextclass.fetchAutoText(); // 获取自动文本
-final autoText = mtextclass.autoText; // 获取公共的autoText变量
+ mtextclass.fetchAutoText();
+final autoText = mtextclass.autoText; 
+  print('单独:'+ autoText); 
+  print('json'+ textValue); 
+  // 获取公共的autoText变量
+   // print('打印'+ ); 
               return Text(
                 TapCounter.getTapCount() < 100
                     ? '$autoText+${TapCounter.getTapCount()}'
@@ -56,10 +61,11 @@ final autoText = mtextclass.autoText; // 获取公共的autoText变量
                 style: TextStyle(color: textColor, fontSize: 32.sp),
               );
             } else {
+              final autoText = mtextclass.autoText; 
               return Text(
                 TapCounter.getTapCount() < 100
-                    ? 'error+${TapCounter.getTapCount()}'
-                    : 'Bug+${TapCounter.getTapCount()~/100}',
+                    ? 'Bug+${TapCounter.getTapCount()}'
+                    : 'Error+${TapCounter.getTapCount()~/100}',
                 style: TextStyle(color: textColor, fontSize: 32.sp),
               );
             }
