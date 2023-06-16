@@ -25,8 +25,9 @@ plan todo
 等待增加敲击木棒效果 
 
 ## 快速开始
-git Clone 这个仓库到本地任意模式下运行即可(Run|DeBug|Profile)
-flutter build Windows 
+  git Clone 这个仓库到本地  
+    任意模式下运行即可(Run|DeBug|Profile)  
+  flutter build Windows   
 ---
 🙏🏿敲电子木鱼,颂赛博真经,见机甲佛祖.  
 咱主打一个虔诚啊(娱乐)  
@@ -40,7 +41,10 @@ flutter build Windows
 首次安装时记得勾选创建桌面快捷方式,不然找不到
 --- 
   
-联系我 2821981550@qq.com  
+联系我 2821981550@qq.com    
+相关帖: https://www.52pojie.cn/thread-1796636-1-1.html  
+哔哩哔哩视频教程:https://www.bilibili.com/video/BV1sV4y1m7LD/  
+
 
 ## 一键安装 
 可以在win10/11上安装使用,   
@@ -66,22 +70,22 @@ flutter build Windows
 ![img.png](http://file.iqg.cc/18w5qdLs)  
     
 "white"   
-![img.png](http://file.iqg.cc/2SIpzP18) 
+![img.png](http://file.iqg.cc/0MXg4hlY) 
   
 "自定义声音"   
-![img.png](http://file.iqg.cc/3JqNp2f9) 
+![img.png](http://file.iqg.cc/0byobFGJ) 
 
 "自定义图片"   
-![img.png](http://file.iqg.cc/3OTAnvOf) 
+![img.png](http://file.iqg.cc/1HFLN0uF) 
 
 "自定义文字"   
-![img.png](http://file.iqg.cc/0fOTNKrU) 
+![img.png](http://file.iqg.cc/3sStdkz3) 
 
 "支持自动播放"   
-![img.png](http://file.iqg.cc/0YLdFqNf) 
+![img.png](http://file.iqg.cc/1nhCSXRu) 
 
 "次数统计管理"   
-![img.png](http://file.iqg.cc/14toy97T) 
+![img.png](http://file.iqg.cc/1QPSX9tn) 
 
 
 
@@ -89,4 +93,4 @@ flutter build Windows
 https://luat.lanzoum.com/ic74K0yxdalc
 
 "打赏开发者"   
-![img.png](http://file.iqg.cc/2q5aPMko) 
+![img.png](http://file.iqg.cc/11FZHg6f) 
