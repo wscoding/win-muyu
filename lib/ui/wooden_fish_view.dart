@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants/app_constants.dart';
 import '../constants/asset_catalog.dart';
-import '../models/app_settings.dart';
 import '../models/merit_text.dart';
 import '../state/providers.dart';
 import '../utils/async_utils.dart';
@@ -59,7 +58,10 @@ class _WoodenFishViewState extends ConsumerState<WoodenFishView>
     });
 
     final settings = ref.read(settingsProvider);
-    _syncAutoTap(settings);
+    _syncAutoTap(
+      enabled: settings.autoTapEnabled,
+      intervalMs: settings.autoTapIntervalMs,
+    );
 
     // 启动后补一次「在线人数」，v2 是在右键时顺手发的
     unawaitedSafely(ref.read(telemetryServiceProvider).reportOnline(settings));
@@ -77,23 +79,20 @@ class _WoodenFishViewState extends ConsumerState<WoodenFishView>
   /// v2 的「帮我敲」是：开启后任意一次点击都会启动一个永不停止的定时器，
   /// 只能靠再次点击才会停；这里改为开关打开就持续自动敲、关闭即停，
   /// 手动点击永远只敲一次。
-  void _syncAutoTap(AppSettings settings) {
-    final interval = settings.autoTapIntervalMs;
-    final shouldRun = settings.autoTapEnabled;
-
-    if (!shouldRun) {
+  void _syncAutoTap({required bool enabled, required int intervalMs}) {
+    if (!enabled) {
       _autoTapTimer?.cancel();
       _autoTapTimer = null;
-      _autoTapIntervalMs = interval;
+      _autoTapIntervalMs = intervalMs;
       return;
     }
 
-    if (_autoTapTimer != null && _autoTapIntervalMs == interval) return;
+    if (_autoTapTimer != null && _autoTapIntervalMs == intervalMs) return;
 
     _autoTapTimer?.cancel();
-    _autoTapIntervalMs = interval;
+    _autoTapIntervalMs = intervalMs;
     _autoTapTimer = Timer.periodic(
-      Duration(milliseconds: interval),
+      Duration(milliseconds: intervalMs),
       (_) => _performTap(),
     );
   }
@@ -151,13 +150,17 @@ class _WoodenFishViewState extends ConsumerState<WoodenFishView>
     final settings = ref.watch(settingsProvider);
     final tapCount = ref.watch(tapCounterProvider);
 
-    // 自动敲击相关设置变化时同步定时器
-    ref.listen<AppSettings>(settingsProvider, (previous, next) {
-      if (previous?.autoTapEnabled != next.autoTapEnabled ||
-          previous?.autoTapIntervalMs != next.autoTapIntervalMs) {
-        _syncAutoTap(next);
-      }
-    });
+    // 只订阅自动敲击相关字段：皮肤、文案、上报开关等变化不会把这里叫醒
+    ref.listen(
+      settingsProvider.select(
+        (settings) => (
+          enabled: settings.autoTapEnabled,
+          intervalMs: settings.autoTapIntervalMs,
+        ),
+      ),
+      (_, next) =>
+          _syncAutoTap(enabled: next.enabled, intervalMs: next.intervalMs),
+    );
 
     return SizedBox.expand(
       child: Stack(
