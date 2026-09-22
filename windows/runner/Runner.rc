@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "wooden_fish" "\0"
+            VALUE "CompanyName", "cc.iqg" "\0"
+            VALUE "FileDescription", "Prue Widgets — 电子木鱼桌面小部件" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "wooden_fish" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "wooden_fish.exe" "\0"
-            VALUE "ProductName", "wooden_fish" "\0"
+            VALUE "InternalName", "PrueWidgets" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023 无书 (Li Zhenyan). MIT licensed." "\0"
+            VALUE "OriginalFilename", "prue_widgets.exe" "\0"
+            VALUE "ProductName", "Prue Widgets" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

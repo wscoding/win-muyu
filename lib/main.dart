@@ -1,51 +1,37 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:prue_widgets/config.dart';
-import 'package:prue_widgets/muyu.dart';
-import 'RePo.dart';
+import 'app.dart';
+import 'services/app_bootstrap.dart';
+import 'state/providers.dart';
+import 'state/settings_controller.dart';
+import 'state/tap_counter_controller.dart';
 
-void main(List<String> args) async {
+Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Config.initWindow(args);
-   TapCounter.initialize(); // 初始化 SharedPreferences 实例
 
-  runApp(const MyApp());
+  // 启动序列全部 await 完成后再建界面：
+  // 单实例判定 -> 读本地状态 -> 建窗 -> 预加载音效
+  final bootstrap = await AppBootstrap.create(args);
 
-try {
-  //http.Response response = await 
-  Getadd.sendRequest();
-  //print(response.body);
-} catch (e) {
- // print('请求失败：$e');
-}
-}
-
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(300, 300),
-      builder: (context, Widget? child) => const MaterialApp(
-        title: 'Prue widgets for Windows',
-        debugShowCheckedModeBanner: false,
-        home: MyHomePage(),
-        
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(backgroundColor: Colors.transparent, body: WoodenFish());
-  }
+  runApp(
+    ProviderScope(
+      overrides: [
+        settingsRepositoryProvider.overrideWithValue(bootstrap.repository),
+        windowServiceProvider.overrideWithValue(bootstrap.windowService),
+        audioServiceProvider.overrideWithValue(bootstrap.audioService),
+        telemetryServiceProvider.overrideWithValue(bootstrap.telemetryService),
+        trayServiceProvider.overrideWithValue(bootstrap.trayService),
+        hotkeyServiceProvider.overrideWithValue(bootstrap.hotkeyService),
+        overlayGeometryProvider.overrideWithValue(bootstrap.geometry),
+        settingsProvider.overrideWith(
+          () => SettingsController(initial: bootstrap.settings),
+        ),
+        tapCounterProvider.overrideWith(
+          () => TapCounterController(initial: bootstrap.tapCount),
+        ),
+      ],
+      child: const PrueWidgetsApp(),
+    ),
+  );
 }

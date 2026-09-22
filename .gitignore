@@ -6,7 +6,7 @@
 build/
 
 # If you're building an application, you may want to check-in your pubspec.lock
-pubspec.lock
+
 *.log
 .flutter-plugins-dependencies
 .flutter-plugins
@@ -23,3 +23,19 @@ doc/api/
 *.js.deps
 *.js.map
 .vscode/settings.json
+
+# 编辑器 / IDE 生成物（flutter create 会生成，但不该进仓库）
+.idea/
+*.iml
+
+# 操作系统杂项
+.DS_Store
+
+# macOS 构建产物
+macos/Pods/
+macos/Flutter/ephemeral/
+macos/*.xcworkspace/xcuserdata/
+macos/*.xcodeproj/xcuserdata/
+
+# Windows 构建产物
+windows/flutter/ephemeral/

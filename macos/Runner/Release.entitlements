@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  刻意关闭 App Sandbox。
+	  本应用的主要功能是「敲击时播放用户指定的本地音频」，
+	  v2 (Windows) 允许用户直接填写任意本地路径；
+	  在沙盒下这类路径无法读取，会导致本地音源功能失效。
+	  应用不上架 Mac App Store，因此关闭沙盒是合理的取舍。
+	  详见 README 的「macOS 平台说明」。
+	-->
+	<key>com.apple.security.app-sandbox</key>
+	<false/>
+</dict>
+</plist>
