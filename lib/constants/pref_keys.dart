@@ -52,4 +52,16 @@ class PrefKeys {
 
   static const String cachedVersionInfo = 'data';
   static const String aboutText = 'aboutText';
+
+  // ---- 后端接口 v3（wid.chr.cc）----
+
+  /// 匿名设备标识。客户端首次启动时随机生成并持久化，
+  /// **不是硬件指纹**，服务端只按它做去重与累计。
+  static const String deviceId = 'deviceId';
+
+  /// 服务端下发的运行时配置缓存（原样存 JSON 字符串）
+  static const String remoteConfig = 'remoteConfig';
+
+  /// 设置云同步的版本号（乐观锁用）
+  static const String settingsRevision = 'settingsRevision';
 }

@@ -57,6 +57,15 @@ abstract interface class DesktopWindowService {
   /// 从「设置面板」恢复成悬浮小部件
   Future<void> exitPanelMode();
 
+  /// 平台标识（windows / macos / other），用于上报与问题定位。
+  ///
+  /// 之所以放在这一层：平台分支按约定只允许出现在本文件，
+  /// 上报层只需读取这个字符串，不必自己判断 `Platform.isXxx`。
+  String get platformSlug;
+
+  /// 系统版本号，例如 `10.0.26200`。取不到时返回空串。
+  String get osVersionLabel;
+
   static DesktopWindowService create({Logger? logger}) {
     if (Platform.isWindows) {
       return WindowsDesktopWindowService(logger: logger);
@@ -235,6 +244,12 @@ class WindowsDesktopWindowService extends WindowManagerDesktopService {
   Future<void> applyPlatformOverlayStyle() async {
     // Windows 侧 window_manager 已覆盖全部需求（无边框 / 透明 / 置顶 / 隐藏任务栏图标）
   }
+
+  @override
+  String get platformSlug => 'windows';
+
+  @override
+  String get osVersionLabel => Platform.operatingSystemVersion;
 }
 
 /// macOS：单实例、隐藏 Dock 图标、悬浮层级等由原生 Swift 代码完成，
@@ -273,6 +288,12 @@ class MacosDesktopWindowService extends WindowManagerDesktopService {
   }
 
   @override
+  String get platformSlug => 'macos';
+
+  @override
+  String get osVersionLabel => Platform.operatingSystemVersion;
+
+  @override
   Future<void> hide() async {
     await super.hide();
   }
@@ -291,6 +312,12 @@ class UnsupportedDesktopWindowService extends WindowManagerDesktopService {
   Future<void> applyPlatformOverlayStyle() async {
     logger.w('当前平台未实现悬浮窗口样式');
   }
+
+  @override
+  String get platformSlug => 'other';
+
+  @override
+  String get osVersionLabel => Platform.operatingSystemVersion;
 }
 
 /// macOS 原生通道的方法名约定。

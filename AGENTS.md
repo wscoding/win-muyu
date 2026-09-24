@@ -178,6 +178,28 @@ flutter analyze   # No issues found!（warning 与 info 同样算失败）
 flutter test      # All tests passed!
 ```
 
+## 后端（server/）
+
+统计后端已重写并上线为 **接口 v3**，站点 `https://wid.chr.cc`，
+服务端工程就在同仓库的 [`server/`](server/README.md)：
+
+- **接口契约**：`server/src/app/content/api-v3.md`（线上 `https://wid.chr.cc/docs`）。
+  注意 `docs/backend-api.md` 是 **v2 历史存档，已作废**。
+- **客户端侧**：`lib/constants/app_config.dart`（地址与密钥）、
+  `lib/services/telemetry_service.dart`（HMAC 签名、批量攒报、心跳、更新检测）、
+  `lib/services/device_identity.dart`（匿名设备标识）、
+  `lib/services/remote_config.dart`（服务端下发的运行时配置）。
+- **改上报相关代码后**，除 `flutter test` 外还应跑一次线上联调：
+  `flutter test integration/live_api_check.dart`
+  —— 它用真实客户端代码打线上接口，能立刻暴露跨语言签名/参数不一致
+  （单元测试只能证明 Dart 侧自洽）。跑完按提示清理测试数据。
+- **部署服务端**：`cd server && python Scripts/deploy_wid_site.py`
+  （内置 staging 语法预检、自动备份、nginx 校验与 OPcache 刷新）。
+  改服务端代码前请务必读 `server/docs/deployment.md` 的「已知坑」一节。
+- **域名现状**：`chr.cc` 的 DNSSEC 配置损坏（DS 是 RSA、DNSKEY 是 ECDSA），
+  做校验的公共 DNS 会 SERVFAIL。这是域名侧问题，需域名所有者修复，
+  详见 `server/docs/extensibility.md` 第 6 节。
+
 - 资源清单（`AssetCatalog`）与 `assets/` 目录的一致性由
   `test/constants/asset_catalog_test.dart` 兜底——新增图片 / 音效时
   记得同步清单，否则测试会失败（这正是我们要的效果，避免运行时白屏）。

@@ -17,6 +17,10 @@ dependencies:
   # ---- 状态管理 ----
   flutter_riverpod: ^3.3.2
 
+  # ---- 后端接口（wid.chr.cc）----
+  # 仅用于 HMAC-SHA256 请求签名（见 TelemetryService._signedHeaders）
+  crypto: ^3.0.7
+
   # ---- 桌面窗口 / 系统集成 ----
   window_manager: ^0.5.2
   screen_retriever: ^0.2.2

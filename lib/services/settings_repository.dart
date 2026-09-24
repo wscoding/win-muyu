@@ -62,8 +62,10 @@ class SettingsRepository {
           _nonEmpty(prefs.getString(PrefKeys.meritSubtitle)) ??
           AppConstants.defaultMeritSubtitle,
       meritPrefixPool: pool,
-      // 后端已下线，默认不上报；老用户此前是被强制上报的，这里同样默认为关闭
-      telemetryEnabled: prefs.getBool(PrefKeys.telemetryEnabled) ?? false,
+      // v3 后端已上线，看板数据全靠它，默认开启（匿名、无个人信息、可随时关）。
+      // 老用户在 v2 时代存过 false 的话，这里会读到 false —— 那是有意为之：
+      // 显式关过就不该因为升级而被悄悄改回来。
+      telemetryEnabled: prefs.getBool(PrefKeys.telemetryEnabled) ?? true,
       releaseChannel: prefs.getBool(PrefKeys.releaseChannel) ?? false,
     );
   }

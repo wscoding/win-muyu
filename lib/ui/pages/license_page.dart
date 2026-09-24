@@ -34,7 +34,7 @@ class AppLicensePage extends StatelessWidget {
       '如有商业需求，请联系开发者获取商业授权。';
 
   static const String _contact =
-      '开发者：\nLi Zhenyan\nQQ群号：574237747\n反馈电子邮箱：\n2821981550\n@qq.com\n软件技术：Flutter + Dart 3';
+      '开发者：\nwushu\nQQ群号：574237747\n反馈电子邮箱：\n2821981550\n@qq.com\n软件技术：Flutter + Dart 3';
 
   @override
   Widget build(BuildContext context) {

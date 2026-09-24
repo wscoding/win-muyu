@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>页面不存在 · Prue Widgets</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { --bg:#0b0d0c; --text:#e9eeeb; --muted:#8f9a94; --jade:#7fd1ae; }
+  body {
+    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:var(--bg); color:var(--text); text-align:center; padding:24px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background-image:radial-gradient(900px 420px at 12% -12%, rgba(127,209,174,.10), transparent 62%);
+    background-repeat:no-repeat;
+  }
+  h1 { font-size:clamp(26px,5vw,40px); margin:0 0 12px; letter-spacing:-.5px; }
+  p { color:var(--muted); margin:0 0 26px; line-height:1.8; }
+  .eyebrow { color:var(--jade); font-size:12.5px; letter-spacing:.16em; text-transform:uppercase; margin-bottom:14px; }
+  a.btn {
+    display:inline-block; padding:11px 22px; border-radius:999px; background:var(--jade);
+    color:#07231a; text-decoration:none; font-weight:560; font-size:14.5px;
+  }
+  a.ghost { background:transparent; color:var(--text); border:1px solid rgba(255,255,255,.18); margin-left:10px; }
+</style>
+</head>
+<body>
+  <div>
+    <div class="eyebrow">404 Not Found</div>
+    <h1>这个页面不存在</h1>
+    <p>可能是链接写错了，或者页面已经合并到别处。<br>不如回去敲一下木鱼，功德 +1。</p>
+    <a class="btn" href="/">返回首页</a>
+    <a class="btn ghost" href="/docs">接口文档</a>
+  </div>
+</body>
+</html>

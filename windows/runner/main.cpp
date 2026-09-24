@@ -27,8 +27,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(1280, 720);
-  // 显示前先不 show：窗口由 Dart 侧的 window_manager 在悬浮样式就绪后再显示，
-  // 避免闪一下带边框的默认窗口
+  // Let Dart configure the overlay style before showing the window.
   if (!window.Create(L"Prue Widgets", origin, size)) {
     return EXIT_FAILURE;
   }

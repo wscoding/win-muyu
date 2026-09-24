@@ -134,7 +134,7 @@ windows/         C++ runner 与安装脚本
 
 ## 许可
 
-MIT License，版权所有 (c) 2023 无书 (Li Zhenyan)。
+MIT License，版权所有 (c) 2023 无书 (wushu)。
 
 软件按「原样」提供，不作任何明示或暗示的保证。
 

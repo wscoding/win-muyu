@@ -52,7 +52,7 @@ class AppSettings {
     this.meritPrefix = '功德',
     this.meritSubtitle = '平安',
     this.meritPrefixPool = const <String>[],
-    this.telemetryEnabled = false,
+    this.telemetryEnabled = true,
     this.releaseChannel = false,
   });
 
@@ -93,7 +93,12 @@ class AppSettings {
   /// 用户自定义的文案池，展示时随机取一条
   final List<String> meritPrefixPool;
 
-  /// 是否允许匿名统计上报
+  /// 是否允许匿名统计上报。
+  ///
+  /// 默认**开启**：这是全网数据看板（`https://wid.chr.cc/dashboard`）唯一的
+  /// 数据来源，关掉就没有人能看到敲击数字了。上报内容只有匿名设备标识与
+  /// 敲击累计数，**不含任何个人信息**（设备标识是本地随机生成并持久化的，
+  /// 不是硬件指纹），用户可随时在这里关掉。
   final bool telemetryEnabled;
 
   /// 更新渠道：true = release，false = beta

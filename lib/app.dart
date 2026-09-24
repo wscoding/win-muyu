@@ -59,6 +59,17 @@ class _PrueWidgetsAppState extends ConsumerState<PrueWidgetsApp> {
       if (sourceChanged || rateChanged) {
         unawaitedSafely(ref.read(audioServiceProvider).prepare(next));
       }
+
+      // 把最新设置同步给上报服务：它需要据此判断「用户是否关掉了统计」，
+      // 并在重新打开后恢复心跳定时器（服务层拿不到 Riverpod 容器）。
+      final telemetry = ref.read(telemetryServiceProvider);
+      final telemetryToggled =
+          previous?.telemetryEnabled != next.telemetryEnabled;
+      telemetry.setSettings(next);
+      if (telemetryToggled && next.telemetryEnabled) {
+        // 刚打开统计：补一次启动上报与心跳，不必等下次重启
+        unawaitedSafely(telemetry.reportStartup(next));
+      }
     });
 
     return ScreenUtilInit(

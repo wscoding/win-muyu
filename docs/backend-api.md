@@ -1,4 +1,29 @@
-# 后端接口约定
+# 后端接口约定（v2 历史存档）
+
+> ⚠️ **本文档已作废，仅作历史对照。**
+>
+> v3 后端已于 2026-09-23 上线，接口契约见
+> [`server/src/app/content/api-v3.md`](../server/src/app/content/api-v3.md)，
+> 线上版本 `https://wid.chr.cc/docs`。
+>
+> 改动要点（v2 → v3）：
+>
+> | 维度 | v2 | v3 |
+> |---|---|---|
+> | 传输入口 | `http://d.999087.com/api.php` + `http://zt.999087.com/app/muyu/repo.php` | `https://wid.chr.cc/api/v1/*`（REST 风格，统一 JSON 响应） |
+> | 鉴权 | 明文 `appkey` 查询参数 | `app_key` + HMAC-SHA256 签名 + 时间戳窗口 + nonce 防重放 |
+> | 敲击上报 | 每次敲击一个 POST（约 7 QPS/用户） | 客户端攒够 N 次或 T 毫秒批量上报，只传累计值 |
+> | 服务端留存 | 逐次写入 | **不存明细**，只累加聚合（global / daily / 设备维度） |
+> | 配置下发 | 无 | `/config` + `/announcement` + `/assets`，改行为不用发版 |
+> | 更新检测 | 静态 `version.json` | `/version`，支持强制更新与最低支持版本 |
+> | 新增能力 | — | 功德榜、每日一签、设置云同步、反馈、崩溃上报、数据看板、管理后台 |
+>
+> 客户端已同步切到 v3（`lib/constants/app_config.dart`、
+> `lib/services/telemetry_service.dart`）。本文件以下内容请勿再作为实现依据。
+
+---
+
+## 以下为 v2 原始记录（历史存档）
 
 > 状态：**v2 的后端已下线，接口待重写。**
 > 客户端当前 `AppConfig.backendEnabled = false`，所有上报被短路，

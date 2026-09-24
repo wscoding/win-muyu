@@ -11,4 +11,4 @@ PRODUCT_NAME = PrueWidgets
 PRODUCT_BUNDLE_IDENTIFIER = cc.iqg.prueWidgets
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 无书 (Li Zhenyan). MIT licensed.
+PRODUCT_COPYRIGHT = Copyright © 2023 无书 (wushu). MIT licensed.

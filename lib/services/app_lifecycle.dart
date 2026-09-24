@@ -10,6 +10,14 @@ import '../state/providers.dart';
 /// 未落盘的敲击次数会直接丢失。这里先把状态写入再退出。
 Future<void> shutdownApp(WidgetRef ref) async {
   await ref.read(tapCounterProvider.notifier).flush();
+
+  // 退出前把攒着的敲击一次性发出去，并主动下线。
+  // 全部失败也不影响正确性：敲击是累计值语义，下次启动会自动补上差额；
+  // 在线状态则由心跳超时（120 秒）兜底，不依赖这次调用成功。
+  final telemetry = ref.read(telemetryServiceProvider);
+  await telemetry.reportOffline();
+  telemetry.dispose();
+
   await ref.read(trayServiceProvider).dispose();
   await ref.read(hotkeyServiceProvider).dispose();
   await ref.read(audioServiceProvider).dispose();

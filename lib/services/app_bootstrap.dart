@@ -6,7 +6,9 @@ import '../constants/app_config.dart';
 import '../models/app_settings.dart';
 import '../utils/async_utils.dart';
 import 'audio_service.dart';
+import 'device_identity.dart';
 import 'hotkey_service.dart';
+import 'remote_config.dart';
 import 'settings_repository.dart';
 import 'telemetry_service.dart';
 import 'tray_service.dart';
@@ -53,7 +55,6 @@ class AppBootstrap {
     final repository = SettingsRepository(logger: logger);
     final windowService = DesktopWindowService.create(logger: logger);
     final audioService = AudioService(logger: logger);
-    final telemetryService = TelemetryService(logger: logger);
     final trayService = TrayService(logger: logger);
     final hotkeyService = HotkeyService(logger: logger);
 
@@ -63,6 +64,24 @@ class AppBootstrap {
     // 2. 读取本地状态（内部包含 v2 -> v3 的键迁移）
     final settings = await repository.load();
     final tapCount = await repository.loadTapCount();
+
+    // 2.5 后端接入所需的本地身份与运行配置。
+    //     设备标识本地随机生成并持久化（不是硬件指纹），
+    //     运行配置用上次服务端下发的缓存，离线也能用。
+    final remoteConfig = await RemoteConfig.load();
+    final identity = await DeviceIdentity.load(
+      platform: windowService.platformSlug,
+      osVersion: windowService.osVersionLabel,
+    );
+    final telemetryService = TelemetryService(
+      identity: identity,
+      remoteConfig: remoteConfig,
+      logger: logger,
+    );
+    logger.i(
+      '设备标识 ${identity.deviceId.substring(0, 8)}…（平台 ${identity.platform}）'
+      '${identity.isFirstLaunch ? '，首次启动' : ''}',
+    );
 
     // 3. 建窗：窗口选项必须在 runApp 之前应用
     final geometry = await windowService.showOverlayWindow();

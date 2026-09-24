@@ -29,8 +29,8 @@ void main() {
       expect(settings.meritPrefix, '功德');
       expect(settings.meritSubtitle, '平安');
       expect(settings.meritPrefixPool, isEmpty);
-      // 后端已下线，默认不上报
-      expect(settings.telemetryEnabled, isFalse);
+      // v3 后端已上线，看板数据全靠上报，默认开启（匿名、可关）
+      expect(settings.telemetryEnabled, isTrue);
     });
   });
 
